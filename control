@@ -1,9 +1,9 @@
-Package: com.billyellis.nanochargingview
+Package: com.aditkamath.nanochargingview
 Name: NanoChargingView
-Depends: mobilesubstrate
-Version: 0.0.1
+Version: 1.0
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
-Maintainer: Billy Ellis
-Author: Billy Ellis
+Depends: mobilesubstrate
+Description: Replicates WatchOS's charge view.
+Maintainer: Adit Kamath <adit@aditkamath.com>
+Author: Adit Kamath <adit@aditkamath.com>
 Section: Tweaks
