@@ -1,91 +1,29 @@
-//Developed by Billy Ellis (@bellis1000)
-
-//Please credit me if you use this source code in your own tweaks
-
-UIView *window;
-
-@interface SBLockScreenBatteryChargingView : UIView
-
-
-@end
-
 %hook SBLockScreenBatteryChargingView
 
--(void)layoutSubviews{
+-(void)layoutSubviews {
+	UIView *window = [[[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds] autorelease]; //create view
+	window.backgroundColor = [UIColor clearColor];
 
-//there is alot of stuff commented out here coz i decided to change the majority of the code
+	UIImageView *background = [[[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds] autorelease];
+	[background setImage:[UIImage imageWithContentsOfFile:@"/var/mobile/Library/SpringBoard/LockBackgroundThumbnail.jpg"]]; //use lockscreen wallpaper
+	background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-//%orig;
+	UIVisualEffectView *blur = [[[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]] autorelease]; //add blur
+	blur.frame = window.bounds;
+	blur.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-/*UIAlertView *a = [[UIAlertView alloc]initWithTitle:@"Alert" message:@"SBLockScreenBatteryChargingView -(void)layoutSubviews;" delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil];
-[a show];*/
+	UIImageView *charge = [[[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2,[UIScreen mainScreen].bounds.size.height/2,130,130)] autorelease]; //charge image
+	NSData *data = [[[NSData alloc] initWithBase64EncodedString:@"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" options:NSDataBase64DecodingIgnoreUnknownCharacters] autorelease];
+	[charge setImage:[UIImage imageWithData:data]];
+	charge.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	charge.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2,[UIScreen mainScreen].bounds.size.height/3);
 
-/*if (!window){
-
-window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-window.backgroundColor = [UIColor clearColor];
-window.windowLevel*/
-
-//removes the default battery text
-
-
-NSMutableDictionary *settings = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@/Library/Preferences/%@",NSHomeDirectory(),@"com.billyellis.nanocharingviewsettings.plist"]];
-
-NSNumber* shouldNotify = [settings objectForKey:@"AwesomeSwitch1"];
-
-if ([shouldNotify boolValue] == YES)
-
-{
-
-window = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-window.backgroundColor = [UIColor clearColor];
-[self addSubview:window];
-
-//bg image
-
-UIImageView *bg = [[UIImageView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-bg.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/NanoChargingView.bundle/bg.png"];
-[window addSubview:bg];
-
-
-//blur
-
-   UIVisualEffect *blurEffect;
-blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-
-UIVisualEffectView *visualEffectView;
-visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-
-visualEffectView.frame = window.bounds;
-[window addSubview:visualEffectView];
-
-
-//charging icon (originally from Carousel.app on the Apple Watch)
-
-UIImageView *image = [[UIImageView alloc]initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width/2-65,[UIScreen mainScreen].bounds.size.height*0.40-65,130,130)];
-
-image.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/NanoChargingView.bundle/image.png"];
-
-[window addSubview:image];
-
-[self performSelector:@selector(hide) withObject:nil afterDelay:1.5];
-
-
-}
-
-%orig;
-
-}
-
-%new
-
--(void)hide{
-
-
-window.hidden = YES;
-window = nil;
-
-
+	[self addSubview:window];
+	[window addSubview:background];
+	[window addSubview:blur];
+	[window addSubview:charge];
+	
+	%orig;
 }
 
 %end
